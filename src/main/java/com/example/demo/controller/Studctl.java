@@ -9,5 +9,22 @@ import com.example.demo.service.Studservice;
 @RestController
 @RequestMapping("/student")
 public class Studctl{
-    @Auto
+    @Autowired
+    private Studservice ser;
+
+    //post
+    @postMapping("/add")
+    public Studentity addStudent(@RequestBody Studentity st) {
+        return ser.saveData(st);
+    }
+
+    //GET ALL
+    @GetMapping("/getall")
+    public Collection<Studentity> getAllStudents(){
+        return ser.getAll();
+    }
+
+    //GET BY ID
+    @GetMapping("/get/{id}")
+    public Collection
 }
