@@ -1,5 +1,5 @@
 package com.example.demo.controller;
-import java.util.collection;
+import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +36,6 @@ public class Studctl{
         @PathVariable int id;
         @RequestBody Studentity st
     ) {
-        return ser.update(id , st);
+        return ser.update(id, st);
     }    
 }
