@@ -4,7 +4,7 @@ public class Studentity {
     private int id;
     private String name;
     public Studentity(){
-
+        
     }
     public Studentity(int id,String name) {
         this.id=id;
