@@ -9,5 +9,5 @@ public interface StudentService {
     List<Studentity> getAllStudentity();
     Optional<Studentity> getOneStudent(Long id);
     void deleteStudent(Long id);
-    Student insertStudentity
+    Student insertStudentity(Student st);
 }
