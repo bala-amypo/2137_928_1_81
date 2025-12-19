@@ -1,29 +1,52 @@
 package com.example.demo.entity;
 
-
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 
 @Entity
 public class LifecycleEvent {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
-private String assetTag;
-private String eventType;
-private String description;
-private LocalDateTime eventTime;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-public Long getId() { return id; }
-public void setId(Long id) { this.id = id; }
-public String getAssetTag() { return assetTag; }
-public void setAssetTag(String assetTag) { this.assetTag = assetTag; }
-public String getEventType() { return eventType; }
-public void setEventType(String eventType) { this.eventType = eventType; }
-public String getDescription() { return description; }
-public void setDescription(String description) { this.description = description; }
-public LocalDateTime getEventTime() { return eventTime; }
-public void setEventTime(LocalDateTime eventTime) { this.eventTime = eventTime; }
+    private String eventType;
+
+    private LocalDate eventDate;
+
+    private String description;
+
+    // getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public LocalDate getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(LocalDate eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
