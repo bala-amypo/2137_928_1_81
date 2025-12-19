@@ -42,4 +42,9 @@ public class TransferRecordServiceImpl implements TransferRecordService {
         }
         return null;
     }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
