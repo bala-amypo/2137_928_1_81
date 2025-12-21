@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.TransferRecord;
 import com.example.demo.repository.TransferRecordRepository;
 import com.example.demo.service.TransferRecordService;
@@ -33,8 +35,9 @@ public class TransferRecordServiceImpl implements TransferRecordService {
     @Override
     public TransferRecord update(Long id, TransferRecord record) {
         TransferRecord existing = getById(id);
+
         if (existing != null) {
-            existing.setAssetTag(record.getAssetTag());
+            existing.setAsset(record.getAsset());          // ✅ FIX
             existing.setFromDept(record.getFromDept());
             existing.setToDept(record.getToDept());
             existing.setTransferDate(record.getTransferDate());

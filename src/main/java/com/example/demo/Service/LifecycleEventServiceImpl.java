@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.LifecycleEvent;
 import com.example.demo.repository.LifecycleEventRepository;
 import com.example.demo.service.LifecycleEventService;
@@ -33,17 +35,15 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
     @Override
     public LifecycleEvent update(Long id, LifecycleEvent event) {
         LifecycleEvent existing = getById(id);
+
         if (existing != null) {
             existing.setEventType(event.getEventType());
-            existing.setEventDate(event.getEventDate());
             existing.setDescription(event.getDescription());
+            // ✅ eventDate is auto-managed (@PrePersist)
             return repository.save(existing);
         }
         return null;
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-}
+    public void delete(
