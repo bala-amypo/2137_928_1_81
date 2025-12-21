@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -10,21 +12,25 @@ public class TransferRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "From department is required")
     private String fromDept;
+
+    @NotBlank(message = "To department is required")
     private String toDept;
+
+    @NotNull(message = "Transfer date is required")
     private LocalDate transferDate;
 
-    
+    @NotNull(message = "Asset is required")
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    
+    @NotNull(message = "Approved by user is required")
     @ManyToOne
     @JoinColumn(name = "approved_by")
     private User approvedBy;
 
-    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
