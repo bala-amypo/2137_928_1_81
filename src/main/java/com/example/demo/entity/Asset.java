@@ -15,12 +15,12 @@ public class Asset {
     private String assetType;
     private String status;
 
-    // MANY assets → ONE user
+    
     @ManyToOne
     @JoinColumn(name = "current_holder_id")
     private User currentHolder;
 
-    // getters and setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

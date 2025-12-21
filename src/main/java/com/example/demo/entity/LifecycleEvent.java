@@ -14,7 +14,7 @@ public class LifecycleEvent {
     private String description;
     private LocalDateTime eventDate;
 
-    // MANY events → ONE asset
+    
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
