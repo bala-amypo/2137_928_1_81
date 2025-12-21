@@ -19,18 +19,18 @@ public class LifecycleEvent {
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    // MANY events → ONE user
+    
     @ManyToOne
     @JoinColumn(name = "performed_by")
     private User performedBy;
 
-    // auto date
+    
     @PrePersist
     public void setDate() {
         this.eventDate = LocalDateTime.now();
     }
 
-    // getters & setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

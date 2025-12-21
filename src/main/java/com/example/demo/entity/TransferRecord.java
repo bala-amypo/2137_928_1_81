@@ -14,17 +14,17 @@ public class TransferRecord {
     private String toDept;
     private LocalDate transferDate;
 
-    // MANY transfers → ONE asset
+    
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    // MANY transfers → ONE admin user
+    
     @ManyToOne
     @JoinColumn(name = "approved_by")
     private User approvedBy;
 
-    // getters & setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
