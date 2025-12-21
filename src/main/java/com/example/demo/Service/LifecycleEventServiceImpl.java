@@ -46,4 +46,7 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
     }
 
     @Override
-    public void delete(
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+}
