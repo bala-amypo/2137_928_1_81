@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.DisposalRecord;
@@ -21,7 +22,7 @@ this.disposalService = disposalService;
 
 
 @PostMapping
-public DisposalRecord createDisposal(@RequestBody DisposalRecord record) {
+public DisposalRecord createDisposal(@Valid @RequestBody DisposalRecord record) {
 return disposalService.save(record);
 }
 

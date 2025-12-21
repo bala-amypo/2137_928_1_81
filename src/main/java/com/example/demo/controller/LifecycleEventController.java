@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.LifecycleEvent;
@@ -21,7 +22,7 @@ this.lifecycleService = lifecycleService;
 
 
 @PostMapping
-public LifecycleEvent createEvent(@RequestBody LifecycleEvent event) {
+public LifecycleEvent createEvent(@Valid @RequestBody LifecycleEvent event) {
 return lifecycleService.save(event);
 }
 

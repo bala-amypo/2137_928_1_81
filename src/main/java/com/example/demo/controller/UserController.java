@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.User;
@@ -21,7 +22,7 @@ this.userService = userService;
 
 
 @PostMapping
-public User createUser(@RequestBody User user) {
+public User createUser(@Valid @RequestBody User user) {
 return userService.save(user);
 }
 

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.TransferRecord;
@@ -21,7 +22,7 @@ this.transferService = transferService;
 
 
 @PostMapping
-public TransferRecord createTransfer(@RequestBody TransferRecord record) {
+public TransferRecord createTransfer(@Valid @RequestBody TransferRecord record) {
 return transferService.save(record);
 }
 
