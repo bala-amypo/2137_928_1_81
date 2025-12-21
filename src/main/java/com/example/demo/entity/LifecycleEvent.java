@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class LifecycleEvent {
@@ -11,42 +11,40 @@ public class LifecycleEvent {
     private Long id;
 
     private String eventType;
-
-    private LocalDate eventDate;
-
     private String description;
+    private LocalDateTime eventDate;
 
-    // getters and setters
+    // MANY events → ONE asset
+    @ManyToOne
+    @JoinColumn(name = "asset_id")
+    private Asset asset;
 
-    public Long getId() {
-        return id;
+    // MANY events → ONE user
+    @ManyToOne
+    @JoinColumn(name = "performed_by")
+    private User performedBy;
+
+    // auto date
+    @PrePersist
+    public void setDate() {
+        this.eventDate = LocalDateTime.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getEventType() {
-        return eventType;
-    }
+    public String getEventType() { return eventType; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
+    public LocalDateTime getEventDate() { return eventDate; }
 
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
+    public Asset getAsset() { return asset; }
+    public void setAsset(Asset asset) { this.asset = asset; }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public User getPerformedBy() { return performedBy; }
+    public void setPerformedBy(User performedBy) { this.performedBy = performedBy; }
 }
