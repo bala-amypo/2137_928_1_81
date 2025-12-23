@@ -1,53 +1,50 @@
 package com.example.demo.service.impl;
 
-
 import java.util.List;
-import org.springframework.stereotype.Service;
-import com.example.demo.entity.DisposalRecord;
-import com.example.demo.repository.DisposalRecordRepository;
-import com.example.demo.service.DisposalRecordService;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.entity.Asset;
+import com.example.demo.repository.AssetRepository;
+import com.example.demo.service.AssetService;
 
 @Service
-public class DisposalRecordServiceImpl implements DisposalRecordService {
+@Transactional   // ✅ enables transaction management for all methods
+public class AssetServiceImpl implements AssetService {
 
+    private final AssetRepository repository;
 
-private final DisposalRecordRepository repository;
+    public AssetServiceImpl(AssetRepository repository) {
+        this.repository = repository;
+    }
 
+    public Asset save(Asset asset) {
+        return repository.save(asset);
+    }
 
-public DisposalRecordServiceImpl(DisposalRecordRepository repository) {
-this.repository = repository;
-}
+    @Transactional(readOnly = true)
+    public List<Asset> getAll() {
+        return repository.findAll();
+    }
 
+    @Transactional(readOnly = true)
+    public Asset getById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 
-public DisposalRecord save(DisposalRecord record) {
-return repository.save(record);
-}
+    public Asset update(Long id, Asset asset) {
+        Asset existing = getById(id);
+        if (existing != null) {
+            existing.setAssetTag(asset.getAssetTag());
+            existing.setAssetType(asset.getAssetType());
+            existing.setStatus(asset.getStatus());
+            return repository.save(existing);
+        }
+        return null;
+    }
 
-
-public List<DisposalRecord> getAll() {
-return repository.findAll();
-}
-
-
-public DisposalRecord getById(Long id) {
-return repository.findById(id).orElse(null);
-}
-
-
-public DisposalRecord update(Long id, DisposalRecord record) {
-DisposalRecord existing = getById(id);
-if (existing != null) {
-existing.setAssetTag(record.getAssetTag());
-existing.setMethod(record.getMethod());
-existing.setDisposalDate(record.getDisposalDate());
-return repository.save(existing);
-}
-return null;
-}
-
-
-public void delete(Long id) {
-repository.deleteById(id);
-}
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
