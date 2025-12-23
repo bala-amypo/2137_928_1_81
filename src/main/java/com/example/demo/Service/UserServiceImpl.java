@@ -1,12 +1,16 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
 @Service
+@Transactional   // ✅ enables transactions for all service methods
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -21,11 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAll() {
         return repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getById(Long id) {
         return repository.findById(id).orElse(null);
     }
