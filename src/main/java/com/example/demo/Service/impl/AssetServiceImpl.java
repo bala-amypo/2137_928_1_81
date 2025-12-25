@@ -1,50 +1,52 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.demo.entity.Asset;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.ValidationException;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetService;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
-@Transactional   // ✅ enables transaction management for all methods
 public class AssetServiceImpl implements AssetService {
 
-    private final AssetRepository repository;
+    private final AssetRepository assetRepository;
 
-    public AssetServiceImpl(AssetRepository repository) {
-        this.repository = repository;
+    public AssetServiceImpl(AssetRepository assetRepository) {
+        this.assetRepository = assetRepository;
     }
 
-    public Asset save(Asset asset) {
-        return repository.save(asset);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Asset> getAll() {
-        return repository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public Asset getById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    public Asset update(Long id, Asset asset) {
-        Asset existing = getById(id);
-        if (existing != null) {
-            existing.setAssetTag(asset.getAssetTag());
-            existing.setAssetType(asset.getAssetType());
-            existing.setStatus(asset.getStatus());
-            return repository.save(existing);
+    @Override
+    public Asset createAsset(Asset asset) {
+        try {
+            return assetRepository.save(asset);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ValidationException("Asset tag must be unique");
         }
-        return null;
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Override
+    public Asset getAsset(Long id) {
+        return assetRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Asset not found"));
+    }
+
+    @Override
+    public List<Asset> getAllAssets() {
+        return assetRepository.findAll();
+    }
+
+    @Override
+    public Asset updateStatus(Long assetId, String status) {
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Asset not found"));
+
+        asset.setStatus(status);
+        return assetRepository.save(asset);
     }
 }
