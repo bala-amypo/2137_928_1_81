@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
-
-import java.util.List;
 import com.example.demo.entity.TransferRecord;
-
+import java.util.List;
 
 public interface TransferRecordService {
-TransferRecord save(TransferRecord record);
-List<TransferRecord> getAll();
-TransferRecord getById(Long id);
-TransferRecord update(Long id, TransferRecord record);
-void delete(Long id);
+
+    TransferRecord createTransfer(Long assetId, TransferRecord record);
+
+    List<TransferRecord> getTransfersForAsset(Long assetId);
+
+    TransferRecord getTransfer(Long id);
 }
