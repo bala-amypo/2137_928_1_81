@@ -1,53 +1,33 @@
 package com.example.demo.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.List;
-import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.DisposalRecord;
 import com.example.demo.service.DisposalRecordService;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
-@RequestMapping("/disposals")
+@RequestMapping("/api/disposals")
 public class DisposalRecordController {
 
+    private final DisposalRecordService service;
 
-private final DisposalRecordService disposalService;
+    public DisposalRecordController(DisposalRecordService service) {
+        this.service = service;
+    }
 
+    @PostMapping("/{assetId}")
+    public DisposalRecord create(@PathVariable Long assetId,
+                                 @RequestBody DisposalRecord record) {
+        return service.createDisposal(assetId, record);
+    }
 
-public DisposalRecordController(DisposalRecordService disposalService) {
-this.disposalService = disposalService;
-}
+    @GetMapping
+    public List<DisposalRecord> getAll() {
+        return service.getAllDisposals();
+    }
 
-
-@PostMapping
-public DisposalRecord createDisposal(@Valid @RequestBody DisposalRecord record) {
-return disposalService.save(record);
-}
-
-
-@GetMapping
-public List<DisposalRecord> getAllDisposals() {
-return disposalService.getAll();
-}
-
-
-@GetMapping("/{id}")
-public DisposalRecord getDisposalById(@PathVariable Long id) {
-return disposalService.getById(id);
-}
-
-
-@PutMapping("/{id}")
-public DisposalRecord updateDisposal(@PathVariable Long id, @RequestBody DisposalRecord record) {
-return disposalService.update(id, record);
-}
-
-
-@DeleteMapping("/{id}")
-public String deleteDisposal(@PathVariable Long id) {
-disposalService.delete(id);
-return "Disposal record deleted successfully";
-}
+    @GetMapping("/{id}")
+    public DisposalRecord get(@PathVariable Long id) {
+        return service.getDisposal(id);
+    }
 }

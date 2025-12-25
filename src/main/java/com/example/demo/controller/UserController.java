@@ -1,46 +1,38 @@
 package com.example.demo.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.List;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
+    private final UserService userService;
 
-private final UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
+    @PostMapping("/register")
+    public User register(@RequestBody RegisterRequest request) {
+        User user = new User();
+        user.setFullName(request.fullName);
+        user.setEmail(request.email);
+        user.setDepartment(request.department);
+        user.setPassword(request.password);
+        return userService.registerUser(user);
+    }
 
-public UserController(UserService userService) {
-this.userService = userService;
-}
+    @GetMapping
+    public List<User> getAll() {
+        return userService.getAllUsers();
+    }
 
-
-@PostMapping
-public User createUser(@Valid @RequestBody User user) {
-return userService.save(user);
-}
-
-
-@GetMapping
-public List<User> getAllUsers() {
-return userService.getAll();
-}
-
-
-@GetMapping("/{id}")
-public User getUserById(@PathVariable Long id) {
-return userService.getById(id);
-}
-
-
-@PutMapping("/{id}")
-public User updateUser(@PathVariable Long id, @RequestBody User user) {
-return userService.update(id, user);
-}
+    @GetMapping("/{id}")
+    public User get(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
 }

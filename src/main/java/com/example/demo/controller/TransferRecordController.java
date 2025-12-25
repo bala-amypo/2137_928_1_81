@@ -1,53 +1,33 @@
 package com.example.demo.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.List;
-import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.TransferRecord;
 import com.example.demo.service.TransferRecordService;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
-@RequestMapping("/transfers")
+@RequestMapping("/api/transfers")
 public class TransferRecordController {
 
+    private final TransferRecordService service;
 
-private final TransferRecordService transferService;
+    public TransferRecordController(TransferRecordService service) {
+        this.service = service;
+    }
 
+    @PostMapping("/{assetId}")
+    public TransferRecord create(@PathVariable Long assetId,
+                                 @RequestBody TransferRecord record) {
+        return service.createTransfer(assetId, record);
+    }
 
-public TransferRecordController(TransferRecordService transferService) {
-this.transferService = transferService;
-}
+    @GetMapping("/asset/{assetId}")
+    public List<TransferRecord> getForAsset(@PathVariable Long assetId) {
+        return service.getTransfersForAsset(assetId);
+    }
 
-
-@PostMapping
-public TransferRecord createTransfer(@Valid @RequestBody TransferRecord record) {
-return transferService.save(record);
-}
-
-
-@GetMapping
-public List<TransferRecord> getAllTransfers() {
-return transferService.getAll();
-}
-
-
-@GetMapping("/{id}")
-public TransferRecord getTransferById(@PathVariable Long id) {
-return transferService.getById(id);
-}
-
-
-@PutMapping("/{id}")
-public TransferRecord updateTransfer(@PathVariable Long id, @RequestBody TransferRecord record) {
-return transferService.update(id, record);
-}
-
-
-@DeleteMapping("/{id}")
-public String deleteTransfer(@PathVariable Long id) {
-transferService.delete(id);
-return "Transfer record deleted successfully";
-}
+    @GetMapping("/{id}")
+    public TransferRecord get(@PathVariable Long id) {
+        return service.getTransfer(id);
+    }
 }
