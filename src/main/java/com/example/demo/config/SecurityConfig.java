@@ -1,7 +1,9 @@
 package com.example.demo.config;
 
 import com.example.demo.repository.UserRepository;
-import com.example.demo.security.*;
+import com.example.demo.security.JwtAuthenticationFilter;
+import com.example.demo.security.JwtUtil;
+import com.example.demo.security.CustomUserDetailsService;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,11 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
+    private final CustomUserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtUtil jwtUtil, UserRepository userRepository) {
+    public SecurityConfig(JwtUtil jwtUtil,
+                          CustomUserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -29,13 +32,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CustomUserDetailsService userDetailsService() {
-        return new CustomUserDetailsService(userRepository);
-    }
-
-    @Bean
     public JwtAuthenticationFilter jwtFilter() {
-        return new JwtAuthenticationFilter(jwtUtil, userDetailsService());
+        return new JwtAuthenticationFilter(jwtUtil, userDetailsService);
     }
 
     @Bean
