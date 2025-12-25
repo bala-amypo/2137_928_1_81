@@ -1,51 +1,84 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "transfer_records")
 public class TransferRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "From department is required")
-    private String fromDept;
-
-    @NotBlank(message = "To department is required")
-    private String toDept;
-
-    @NotNull(message = "Transfer date is required")
-    private LocalDate transferDate;
-
-    @NotNull(message = "Asset is required")
     @ManyToOne
-    @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    @NotNull(message = "Approved by user is required")
+    private String fromDepartment;
+    private String toDepartment;
+    private LocalDate transferDate;
+
     @ManyToOne
-    @JoinColumn(name = "approved_by")
     private User approvedBy;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public TransferRecord() {}
 
-    public String getFromDept() { return fromDept; }
-    public void setFromDept(String fromDept) { this.fromDept = fromDept; }
+    public TransferRecord(Long id, Asset asset, String fromDepartment,
+                          String toDepartment, LocalDate transferDate,
+                          User approvedBy) {
+        this.id = id;
+        this.asset = asset;
+        this.fromDepartment = fromDepartment;
+        this.toDepartment = toDepartment;
+        this.transferDate = transferDate;
+        this.approvedBy = approvedBy;
+    }
 
-    public String getToDept() { return toDept; }
-    public void setToDept(String toDept) { this.toDept = toDept; }
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public LocalDate getTransferDate() { return transferDate; }
-    public void setTransferDate(LocalDate transferDate) { this.transferDate = transferDate; }
+    public Asset getAsset() {
+        return asset;
+    }
+ 
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
 
-    public Asset getAsset() { return asset; }
-    public void setAsset(Asset asset) { this.asset = asset; }
+    public String getFromDepartment() {
+        return fromDepartment;
+    }
+ 
+    public void setFromDepartment(String fromDepartment) {
+        this.fromDepartment = fromDepartment;
+    }
 
-    public User getApprovedBy() { return approvedBy; }
-    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
+    public String getToDepartment() {
+        return toDepartment;
+    }
+ 
+    public void setToDepartment(String toDepartment) {
+        this.toDepartment = toDepartment;
+    }
+
+    public LocalDate getTransferDate() {
+        return transferDate;
+    }
+ 
+    public void setTransferDate(LocalDate transferDate) {
+        this.transferDate = transferDate;
+    }
+
+    public User getApprovedBy() {
+        return approvedBy;
+    }
+ 
+    public void setApprovedBy(User approvedBy) {
+        this.approvedBy = approvedBy;
+    }
 }
