@@ -10,36 +10,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repo;
-    private final PasswordEncoder encoder;
+    private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository; this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User registerUser(User user) {
-
-        if (repo.existsByEmail(user.getEmail())) {
-            throw new ValidationException("Email already in use");
-        }
-
-        if (user.getPassword() == null || user.getPassword().length() < 8) {
-            throw new ValidationException("Password must be at least 8 characters");
-        }
-
-        if (user.getDepartment() == null) {
-            throw new ValidationException("Department is required");
-        }
-
-        user.prePersist();
-        return repo.save(user);
+        if(user.getPassword().length() < 8) throw new ValidationException("Password must be at least 8 characters");
+        if(user.getDepartment() == null || user.getDepartment().isEmpty()) throw new ValidationException("Department is required");
+        if(repository.existsByEmail(user.getEmail())) throw new ValidationException("Email already in use");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
     }
 
     @Override
-    public User getByEmail(String email) {
-        return repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public User getUser(Long id) {
+        return repository.findById(id).orElseThrow();
     }
 }
