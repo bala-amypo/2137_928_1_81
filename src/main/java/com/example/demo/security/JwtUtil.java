@@ -16,14 +16,14 @@ import java.util.Map;
 public class JwtUtil {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long expiration = 1000 * 60 * 60; // 1 hour
+    private final long expiration = 60 * 60 * 1000; // 1 hour
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
                 .compact();
     }
@@ -31,32 +31,32 @@ public class JwtUtil {
     public String generateTokenForUser(User user) {
         return generateToken(
                 Map.of(
+                        "userId", user.getId(),
                         "email", user.getEmail(),
-                        "role", user.getRole(),
-                        "userId", user.getId()
+                        "role", user.getRole()
                 ),
                 user.getEmail()
         );
     }
 
-    // 🔥 THIS IS THE IMPORTANT FIX
+    // 🔥 REQUIRED BY TESTS
     public Jws<Claims> parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token);
+                .parseSignedClaims(token);
     }
 
     public String extractUsername(String token) {
-        return parseToken(token).getBody().getSubject();
+        return parseToken(token).getPayload().getSubject();
     }
 
     public String extractRole(String token) {
-        return (String) parseToken(token).getBody().get("role");
+        return (String) parseToken(token).getPayload().get("role");
     }
 
     public Long extractUserId(String token) {
-        return ((Number) parseToken(token).getBody().get("userId")).longValue();
+        return ((Number) parseToken(token).getPayload().get("userId")).longValue();
     }
 
     public boolean isTokenValid(String token, String username) {
