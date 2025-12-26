@@ -3,15 +3,16 @@ package com.example.demo.controller;
 import com.example.demo.entity.TransferRecord;
 import com.example.demo.service.TransferRecordService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/transfers")
-public class TransferRecordController {
+public class TransferController {
 
     private final TransferRecordService service;
 
-    public TransferRecordController(TransferRecordService service) {
+    public TransferController(TransferRecordService service) {
         this.service = service;
     }
 
@@ -22,12 +23,7 @@ public class TransferRecordController {
     }
 
     @GetMapping("/asset/{assetId}")
-    public List<TransferRecord> getForAsset(@PathVariable Long assetId) {
+    public List<TransferRecord> getTransfers(@PathVariable Long assetId) {
         return service.getTransfersForAsset(assetId);
-    }
-
-    @GetMapping("/{id}")
-    public TransferRecord get(@PathVariable Long id) {
-        return service.getTransfer(id);
     }
 }
