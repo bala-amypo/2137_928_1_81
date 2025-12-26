@@ -8,14 +8,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long expiration = 60 * 60 * 1000; // 1 hour
 
     public String generateToken(Map<String, Object> claims, String subject) {
@@ -39,7 +39,7 @@ public class JwtUtil {
         );
     }
 
-    // 🔥 REQUIRED BY TESTS
+    // REQUIRED BY TESTS (getPayload())
     public Jws<Claims> parseToken(String token) {
         return Jwts.parser()
                 .verifyWith(key)
