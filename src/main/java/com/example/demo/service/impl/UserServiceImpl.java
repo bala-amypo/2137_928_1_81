@@ -20,17 +20,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(User user) {
-        if (repo.existsByEmail(user.getEmail()))
+
+        if (repo.existsByEmail(user.getEmail())) {
             throw new ValidationException("Email already in use");
+        }
 
-        if (user.getPassword().length() < 8)
+        if (user.getPassword() == null || user.getPassword().length() < 8) {
             throw new ValidationException("Password must be at least 8 characters");
+        }
 
-        if (user.getDepartment() == null)
+        if (user.getDepartment() == null) {
             throw new ValidationException("Department is required");
+        }
 
         user.prePersist();
-        user = repo.save(user);
-        return user;
+        return repo.save(user);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

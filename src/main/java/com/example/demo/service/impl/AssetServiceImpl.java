@@ -2,10 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Asset;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.ValidationException;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,40 +11,33 @@ import java.util.List;
 @Service
 public class AssetServiceImpl implements AssetService {
 
-    private final AssetRepository assetRepository;
+    private final AssetRepository repo;
 
-    public AssetServiceImpl(AssetRepository assetRepository) {
-        this.assetRepository = assetRepository;
+    public AssetServiceImpl(AssetRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public Asset createAsset(Asset asset) {
-        try {
-            return assetRepository.save(asset);
-        } catch (DataIntegrityViolationException ex) {
-            throw new ValidationException("Asset tag must be unique");
-        }
+        asset.prePersist();
+        return repo.save(asset);
     }
 
     @Override
     public Asset getAsset(Long id) {
-        return assetRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Asset not found"));
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 
     @Override
     public List<Asset> getAllAssets() {
-        return assetRepository.findAll();
+        return repo.findAll();
     }
 
     @Override
     public Asset updateStatus(Long assetId, String status) {
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Asset not found"));
-
+        Asset asset = getAsset(assetId);
         asset.setStatus(status);
-        return assetRepository.save(asset);
+        return repo.save(asset);
     }
 }
