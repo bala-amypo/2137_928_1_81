@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "lifecycle_events")
 public class LifecycleEvent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
@@ -24,8 +23,7 @@ public class LifecycleEvent {
     public LifecycleEvent() {}
 
     public LifecycleEvent(Long id, Asset asset, String eventType,
-                          String eventDescription, LocalDateTime eventDate,
-                          User performedBy) {
+                          String eventDescription, LocalDateTime eventDate, User performedBy) {
         this.id = id;
         this.asset = asset;
         this.eventType = eventType;
@@ -36,56 +34,13 @@ public class LifecycleEvent {
 
     @PrePersist
     public void prePersist() {
-        if (eventDate == null) {
-            eventDate = LocalDateTime.now();
-        }
+        if (eventDate == null) eventDate = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
- 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
- 
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
- 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getEventDescription() {
-        return eventDescription;
-    }
- 
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
-    }
-
-    public LocalDateTime getEventDate() {
-        return eventDate;
-    }
- 
-    public void setEventDate(LocalDateTime eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public User getPerformedBy() {
-        return performedBy;
-    }
- 
-    public void setPerformedBy(User performedBy) {
-        this.performedBy = performedBy;
-    }
+    public void setId(Long id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setAsset(Asset asset) { this.asset = asset; }
+    public Asset getAsset() { return asset; }
+    public void setPerformedBy(User u) { this.performedBy = u; }
+    public User getPerformedBy() { return performedBy; }
 }
