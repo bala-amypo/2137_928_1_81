@@ -32,7 +32,7 @@ public class Asset {
         if(createdAt == null) createdAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
+    
     public Long getId() {return id;} public void setId(Long id) {this.id = id;}
     public String getAssetTag() {return assetTag;} public void setAssetTag(String assetTag) {this.assetTag = assetTag;}
     public String getAssetType() {return assetType;} public void setAssetType(String assetType) {this.assetType = assetType;}
