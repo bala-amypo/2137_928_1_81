@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,27 +18,38 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private AuthenticationManager authManager;
+
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // ✅ FIX 1: Encode password before saving
     @PostMapping("/register")
     public User register(@RequestBody RegisterRequest request) {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setDepartment(request.getDepartment());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userService.registerUser(user);
     }
 
+    // ✅ FIX 2: Authenticate correctly and fetch user safely
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
         );
-        User user = (User) auth.getPrincipal();
+
+        User user = userService.getUserByEmail(request.getEmail());
         return jwtUtil.generateTokenForUser(user);
     }
 }
