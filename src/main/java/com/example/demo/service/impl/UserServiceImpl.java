@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Email already in use");
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER"); // 🔴 REQUIRED
-        user.setCreatedAt(LocalDateTime.now()); // 🔴 REQUIRED
+        user.setRole("USER"); 
+        user.setCreatedAt(LocalDateTime.now()); 
 
         return repository.save(user);
     }
